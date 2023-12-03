@@ -63,7 +63,7 @@ class Matrix
 			elements.cbegin(),
 			elements.cend(),
 			elements.begin(),
-			[](T element) { return -1 * element; }
+			[t](T element) { return t * element; }
 		);
 
 		return *this;
@@ -96,17 +96,29 @@ class Matrix
 template <typename T, size_t R>
 using Vector = Matrix<T,R,1>;
 
+template <typename T>
+using Vec3 = Matrix<T,3,1>;
+
 template <typename T, size_t C>
 using Covector = Matrix<T,1,C>;
 
 template <typename T>
+using Cov3 = Matrix<T,1,3>;
+
+template <typename T>
 using Scalar = Matrix<T,1,1>;
 
-template <typename T, size_t R>
-using Point = Vector<T,4>;
+template <typename T>
+using Point4 = Vector<T,4>;
 
-template <typename T, size_t R>
-using Normal = Covector<T,4>;
+template <typename T>
+using Point3 = Vector<T,3>;
+
+template <typename T>
+using Plane = Covector<T,4>;
+
+//template <typename T, size_t R>
+//using Normal = Covector<T,3>;
 
 template <typename T, size_t R, size_t C>
 auto sqrt(Matrix <T,R,C> const& matrix) -> Matrix <T,R,C>
@@ -116,6 +128,38 @@ auto sqrt(Matrix <T,R,C> const& matrix) -> Matrix <T,R,C>
 	for (size_t i{0}; i < R*C; i += 1)
 	{
 		result.elements[i] = std::sqrt(matrix.elements[i]);
+	}
+
+	return result;
+}
+
+template <typename T, size_t R, size_t C, typename K>
+auto operator*(K k, Matrix <T,R,C> const& rhs) -> Matrix <T,R,C>
+{
+	Matrix <T,R,C> result{};
+
+	for (size_t i{0}; i < R*C; i += 1)
+	{
+		result.elements[i] = k * rhs.elements[i];
+	}
+
+	return result;
+}
+
+template <typename T, size_t R, size_t C, typename K>
+auto operator*(Matrix <T,R,C> const& lhs, K k) -> Matrix <T,R,C>
+{
+	return k * lhs;
+}
+
+template <typename T, size_t R, size_t C, typename K>
+auto operator/(Matrix <T,R,C> const& rhs, K k) -> Matrix <T,R,C>
+{
+	Matrix <T,R,C> result{};
+
+	for (size_t i{0}; i < R*C; i += 1)
+	{
+		result.elements[i] = rhs.elements[i] / k;
 	}
 
 	return result;
@@ -159,7 +203,8 @@ auto operator*(Matrix <T,RL,N> const& lhs, Matrix <T,N,CR> const& rhs) -> Matrix
 			T value{};
 			for (size_t i{0}; i < N; i += 1)
 			{
-				value += lhs.elements[c*RL + i] * rhs.elements[r + CR*i];
+				// lhs[r, i] * rhs[i, c]
+				value += lhs.elements[r*N + i] * rhs.elements[i*CR + c];
 			}
 
 			result.elements[r*CR + c] = value;
@@ -206,15 +251,39 @@ auto transpose(Matrix <T,N,N> const& matrix) -> Matrix <T,N,N>
 }
 
 template <typename T, size_t R>
-auto modulus_sq(Vector <T,R> const& vec) -> Scalar <T>
+auto length_squared(Vector <T,R> const& vec) -> Scalar <T>
 {
-	return vec * transpose(vec);
+	return transpose(vec) * vec;
 }
 
 template <typename T, size_t R>
-auto modulus(Vector <T,R> const& vec) -> Scalar <T>
+auto length(Vector <T,R> const& vec) -> Scalar <T>
 {
-	return sqrt(modulus_sq(vec));
+	return sqrt(length_squared(vec));
+}
+
+template <typename T, size_t R>
+auto length_squared(Covector <T,R> const& vec) -> Scalar <T>
+{
+	return transpose(vec) * vec;
+}
+
+template <typename T, size_t R>
+auto length(Covector <T,R> const& vec) -> Scalar <T>
+{
+	return sqrt(length_squared(vec));
+}
+
+template <typename T, size_t R>
+auto normalize(Vector <T,R> const& vec) -> Vector <T,R>
+{
+	return vec / length(vec);
+}
+
+template <typename T, size_t R>
+auto normalize(Covector <T,R> const& vec) -> Covector <T,R>
+{
+	return vec / length(vec);
 }
 
 //template <typename T, size_t N>
@@ -267,7 +336,6 @@ auto value(Scalar <T> c) -> T
 {
 	return c.elements[0];
 }
-
 
 template <typename T, size_t R, size_t C>
 auto print(Matrix <T,R,C> const& matrix)
