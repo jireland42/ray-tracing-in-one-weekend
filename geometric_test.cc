@@ -147,10 +147,32 @@ int main()
 	//print(m110);
 
 	// transpose (square)
+	Matrix <int, 2, 2> m14{1, -3, -2, -1};
+	Matrix <int, 3, 3> m15{2, 4, -5, 7, 1, 0, -3, 12, 10};
+	print(transpose(m14));
+	print(transpose(m15));
 
 	// transpose (rectangular)
+	Matrix <int, 2, 5> m16{1, 9, -2, 4, -2, 1, 1, 0, 6, -3};
+	Matrix <int, 4, 3> m17{-9, 8, 21, 0, -7, 0, 6, 1, 4, -2, 0, 6};
+	print(transpose(m16));
+	print(transpose(m17));
+
+	Vector <int, 2> v12{1, 0};
+	Vector <int, 4> v13{0, -1, 0, 1};
+	print(transpose(v12));
+	print(transpose(v13));
+
+	Covector <int, 3> c13{6, 0, 2};
+	Covector <int, 4> c14{-1, -1, 9, 5};
+	print(transpose(c13));
+	print(transpose(c14));
 
 	// length squared
+	Vector <int, 4> v14{0, -1, 0, 1};
+	Vector <int, 4> v15{2, 2, -2, -2};
+	print(length_squared(v14));
+	print(length_squared(v15));
 
 	// length
 
