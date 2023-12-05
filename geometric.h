@@ -117,11 +117,8 @@ using Point3 = Vector<T,3>;
 template <typename T>
 using Plane = Covector<T,4>;
 
-//template <typename T, size_t R>
-//using Normal = Covector<T,3>;
-
 template <typename T>
-auto value(Scalar<T>& scalar) -> T
+constexpr decltype(auto) value(T&& scalar)
 {
 	return scalar.elements[0];
 }
@@ -137,6 +134,17 @@ constexpr auto sqrt(Matrix <T,R,C> const& matrix) -> Matrix <T,R,C>
 	}
 
 	return result;
+}
+
+template <typename T, size_t R, size_t C>
+constexpr auto sqrt(Matrix <T,R,C> && matrix) -> Matrix <T,R,C>
+{
+	for (size_t i{0}; i < R*C; i += 1)
+	{
+		matrix.elements[i] = std::sqrt(matrix.elements[i]);
+	}
+
+	return matrix;
 }
 
 template <typename T, size_t R, size_t C, typename K>
@@ -242,10 +250,6 @@ constexpr auto transpose(Matrix <T,R,C> const& matrix) -> Matrix <T,C,R>
 	{
 		for (size_t c{0}; c < C; c += 1)
 		{
-			//result.elements[r*C + c] = matrix.elements[r + c*C];
-			//result.elements[r + c*C] = matrix.elements[r*C + c];
-
-			//result.elements[r][c] = matrix.elements[c][r];
 			result.elements[c*R + r] = matrix.elements[r*C + c];
 		}
 	}
@@ -260,8 +264,6 @@ constexpr auto transpose(Matrix <T,N,N> const& matrix) -> Matrix <T,N,N>
 
 	for (size_t r{0}; r < N; r += 1)
 	{
-		//std::cout << "r: " << r << ", exist: " << ", r: " << rr'\n';
-
 		result.elements[r * (N + 1)] = matrix.elements[r * (N + 1)];
 
 		for (size_t c{r + 1}; c < N; c += 1)
@@ -274,50 +276,23 @@ constexpr auto transpose(Matrix <T,N,N> const& matrix) -> Matrix <T,N,N>
 	return result;
 }
 
-template <typename T, size_t R>
-constexpr auto length_squared(Vector <T,R> const& vec) -> Scalar <T>
+template <typename T>
+constexpr decltype(auto) length_squared(T&& vec)
 {
 	return transpose(vec) * vec;
 }
 
-template <typename T, size_t R>
-constexpr auto length(Vector <T,R> const& vec) -> T
+template <typename T>
+constexpr decltype(auto) length(T&& vec)
 {
-	return sqrt(value(length_squared(vec)));
+	return sqrt(value(length_squared(std::forward<T>(vec))));
 }
 
-template <typename T, size_t R>
-constexpr auto length_squared(Covector <T,R> const& vec) -> Scalar <T>
-{
-	return transpose(vec) * vec;
-}
-
-template <typename T, size_t R>
-constexpr auto length(Covector <T,R> const& vec) -> T
-{
-	return sqrt(value(length_squared(vec)));
-}
-
-template <typename T, size_t R>
-constexpr auto normalize(Vector <T,R> const& vec) -> Vector <T,R>
+template <typename T>
+constexpr decltype(auto) normalize(T && vec)
 {
 	return vec / length(vec);
 }
-
-template <typename T, size_t R>
-constexpr auto normalize(Covector <T,R> const& vec) -> Covector <T,R>
-{
-	return vec / length(vec);
-}
-
-//template <typename T, size_t N>
-//auto cross(Vector <T,N> const& lhs, Vector <T,N> const& rhs);
-
-//template <typename T, size_t N>
-//auto wedge(Vector <T,N> const& lhs, Vector <T,N> const& rhs);
-
-//template <typename T, size_t N>
-//auto antiwedge(Vector <T,N> const& lhs, Vector <T,N> const& rhs);
 
 template <typename T, size_t N>
 constexpr auto x(Vector <T,N> const& vec) -> T
@@ -353,12 +328,6 @@ template <typename T, size_t N>
 constexpr auto z(Covector <T,N> const& vec) -> T
 {
 	return vec.elements[2];
-}
-
-template <typename T>
-constexpr auto value(Scalar <T> c) -> T
-{
-	return c.elements[0];
 }
 
 template <typename T, size_t R, size_t C>
