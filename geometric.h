@@ -17,6 +17,7 @@ class Matrix
 
 	constexpr Matrix() : elements{std::array <T, C*R>{}} {}
 	constexpr Matrix(std::array <T, R*C> elements) : elements{std::move(elements)} {}
+	//constexpr Matrix(Matrix <T, R*C>&& expiring) : elements{std::move(expiring).elements} {}
 	constexpr Matrix(std::initializer_list <T> initial_elements) : elements{std::array <T, C*R> {}}
 	{
 		auto new_elements_iterator{initial_elements.begin()};

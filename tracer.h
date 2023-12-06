@@ -7,8 +7,9 @@
 #include <iostream>
 
 template <typename T>
-auto hit_sphere(Point3<T> const& centre, T radius, Ray<T> const& ray) -> bool
+decltype(auto) hit_sphere(Point3<T> const& centre, T radius, Ray<T> const& ray)
 {
+	// TODO: profile this for using wedge product?
 	// finding the intersection of the ray
 	//     r.origin + t * ray.direction
 	// and the sphere defined by points, P, such that
@@ -20,25 +21,42 @@ auto hit_sphere(Point3<T> const& centre, T radius, Ray<T> const& ray) -> bool
 	//     - radius^2
 	auto centre_normal{ray.origin() - centre};
 	auto direction_length_squared{length_squared(ray.direction())};
-	auto deviation{2 * transpose(ray.direction()) * centre_normal};
 	auto centre_normal_length_squared{length_squared(centre_normal)};
 
 	auto a{direction_length_squared};
-	auto b{2.0 * transpose(centre_normal) * ray.direction()};
+	auto half_b{transpose(centre_normal) * ray.direction()};
 	auto c{value(centre_normal_length_squared) - radius*radius};
-	auto discriminant{value(b*b - 4*a*c)};
+	auto quarter_discriminant{value((half_b)*(half_b) - a*c)};
 
-	return (discriminant >= 0.0);
+	if ((4*quarter_discriminant) < 0.0)
+	{
+		return -1.0;
+	}
+	else
+	{
+		//std::cerr << "Nat a: " << value(a) << '\n';
+		//std::cerr << "Mul a: " << 1.0*value(a) << '\n';
+		//std::cerr << "Nat: " << (-value(half_b) + sqrt((quarter_discriminant))) / value(a) << '\n';
+		//std::cerr << "Mul: " << (-value(half_b) + sqrt((quarter_discriminant))) / (1.0*value(a)) << '\n' << '\n';
+		return (-value(half_b) + sqrt(quarter_discriminant)) / 1*value(a);
+	}
 }
 
 template <typename T>
 auto ray_colour(Ray<T> const& ray)
 {
 	Point3<T> circle_centre{0.0, 0.0, 1.0};
-	T circle_radius{0.60};
+	T circle_radius{0.80};
 	Colour circle_colour{1.0, 0.0, 0.0};
 
-	if (hit_sphere (circle_centre, circle_radius, ray)) { return circle_colour; }
+	auto time_of_hit{hit_sphere(circle_centre, circle_radius, ray)};
+
+	if (time_of_hit > 0.0)
+	{
+		auto normal{normalize(ray.at(time_of_hit) - circle_centre)};
+		auto colour_vec{0.5 * (normal + Point3<T>({1.0, 1.0, 1.0}))};
+		return Colour{x(colour_vec), y(colour_vec), z(colour_vec)};
+	}
 
 	auto unit_direction{normalize(ray.direction())};
 	auto sample_point{0.5 * (y(unit_direction) + 1.0)}; // -1 <= y <= 1

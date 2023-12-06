@@ -11,9 +11,9 @@ class Ray
 	: _origin{std::move(origin)}, _direction{std::move(direction)} {}
 
 	template <typename U>
-	Point3<T> at(U u) const
+	Point3<T> at(U time_of_hit) const
 	{
-		return _origin + (u * _direction);
+		return _origin + (time_of_hit * _direction);
 	}
 
 	constexpr auto origin() const& -> Point3<T> { return _origin; }
