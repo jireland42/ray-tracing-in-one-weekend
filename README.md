@@ -59,7 +59,7 @@ To get an idea of how things work, I've put together the makings of a demo. To t
 
 FE - Front End
 
-Part 1 - Single Piece of Record Attack
+#### Part 1 - Single Piece of Record Attack
 
 FE: Add Users: Anna
 FE: Add Custodians: BMO
@@ -75,7 +75,7 @@ FE: Verify Data (Anna - should fail and show one mismatching hash)
 
 REFRESH THE PAGE
 
-Part 2 - Attack on Entire Account
+#### Part 2 - Attack on Entire Account
 
 FE: Add Users: Robert
 FE: Add Custodians: Ledger
@@ -92,9 +92,9 @@ FE: Verify Data (Robert - should work)
 FE: View Data (Robert - notice the beneficiaries are all different)
 FE: Verify Data (Robert - should fail and show all hashes mismatching)
 
-REFRESH THE PAGE
+* REFRESH THE PAGE *
 
-Part 3 - Adding A New Bequest Record
+#### Part 3 - Adding A New Bequest Record
 
 FE: Add Users: Jesse
 FE: View Data (Jesse)
