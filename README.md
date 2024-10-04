@@ -37,11 +37,13 @@ On the back end, whenever data is inserted, deleted, or updated, I have enabled 
 
 ### Build
 
+NOTE: the project assumes it is in the directory __bequest-interview-question-2__, which is hardcoded in the run script (```/scripts/run.sh```) and the attack scripts to determine the name of the container. If this part fails, change "bequest" to the name of the top-level directory of the project.
+
 There are three main components to the build, the client, the server, and the databases. The databases have been containerized for convenience to demo. To spin up te databases, navigate to the root folder and run
 
 	./scripts/start.sh
 
-This will run the docker-compose file that will spin up the main database, spin up the logging database, create the databases in the respective containers, then the main database will be configured and restart for the CDC to begin. The containers are made available at port 7654 for the main database and 8765 for the logging database (both on localhost).
+This will run the docker-compose file that will spin up the main database, spin up the logging database, and configure and restart the main database to enable the CDC to begin. The databases in the containers are made available at __port 7654__ for the main database and __port 8765__ for the logging database.
 
 To run the server, navigate to the server directory in the top-level directory of the project. Run
 
@@ -123,6 +125,27 @@ FE: View Data (Jesse - notice there's an extra row)
 
 FE: Verify Data (Jesse - should fail and show a server-only hash)
 
+## Additional Caveats
+
+The database is not persistent since I didn't tie it to a volume. On subsequent runs, to ensure the client and server databases are in sync, delete any data under IndexedDB in the web tools of your browser.
+
+## Cleaning Up
+
+After stopping the process in the main window, the application leaves two docker containers running. To view them use
+
+	docker ps
+
+To stop and remove them use
+
+	docker compose stop
+	docker compose rm
+
+You'll need to verify the correct (2) containers are being removed. If something goes wrong and you need to abort, use
+
+	docker rm {CONTAINER ID}
+
+where CONTAINER ID comes from docker ps.
+
 
 ## Final Thoughts
 
@@ -132,6 +155,6 @@ The most obvious one is finishing some sort of implementation for doing the roll
 
 Another major pain point with this implementation is the user of IndexedDB. In principle, this data can disappear at any time. The user should likely be able to fall back to verifying the data is correct in the worst case scenario, but there still should be support added for downloading the hashes so they can be transferred to another device without leaving the user's possession. Using the filesystem is another option, but I didn't think it had cross-browser support when I started this (I should have verified this). Using a native application would allow for proper filesystem storage, but the client could still lose their device. One last option here would be to store the hashes on a public (probably layer 2) blockchain. Depending on the size of the assets and the potential for loss, this could be a legitimate consideration.
 
-There are plenty of other smaller things not implemented such as deleting and updating the records, not doing a full page reload on data submission and properly handling clearing the textboxes, giving users feedback when their data was submitted successfully, being more helpful identifying what went wrong when their data wasn't stored, and plenty of security considerations not made. I hope that's fine for the format.
+There are plenty of other smaller things not implemented such as deleting and updating the records, not doing a full page reload on data submission and properly handling clearing the textboxes, giving users feedback when their data was submitted successfully, being more helpful identifying what went wrong when their data wasn't stored, extracting components to make the biggest component more manageable, and plenty of security considerations not made. I hope that's fine for the format.
 
 Enjoy the gaudy fall-themed application!
