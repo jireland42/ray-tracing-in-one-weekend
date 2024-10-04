@@ -62,10 +62,15 @@ FE - Front End
 #### Part 1 - Single Piece of Record Attack
 
 FE: Add Users: Anna
+
 FE: Add Custodians: BMO
+
 FE: Store Data: *any string for account and benefactor* (use Anna and BMO)
+
 FE: Store Data: ** (use Anna and BMO)
+
 FE: View Data (Anna)
+
 FE: Verify Data (Anna - should work)
 
 	./scripts/single_bequest_attack.sh
