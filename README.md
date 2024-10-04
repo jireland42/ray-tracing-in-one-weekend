@@ -78,7 +78,7 @@ FE - Front End
 
 #### Part 1 - Single Piece of Record Attack
 
-Changes the beneficiary of the first user's first bequest.
+* Changes the beneficiary of the first user's first bequest.
 
 FE: Add Users: Anna
 
@@ -102,7 +102,7 @@ REFRESH THE PAGE
 
 #### Part 2 - Attack on Entire Account
 
-Changes the beneficiary of all of the second user's bequests.
+* Changes the beneficiary of all of the second user's bequests.
 
 FE: Add Users: Robert
 
@@ -132,7 +132,7 @@ REFRESH THE PAGE
 
 #### Part 3 - Adding A New Bequest Record
 
-Adds a new bequest to the third user.
+* Adds a new bequest to the third user.
 
 FE: Add Users: Jesse
 
