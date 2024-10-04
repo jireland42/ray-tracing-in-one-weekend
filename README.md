@@ -58,50 +58,52 @@ npm run start
 To get an idea of how things work, I've put together the makings of a demo. To try it out, follow these instructions.
 
 FE - Front End
-TW - Terminal Window
 
 Part 1 - Single Piece of Record Attack
-	FE: Add Users: Anna
-	FE: Add Custodians: BMO
-	FE: Store Data: *any string for account and benefactor* (use Anna and BMO)
-	FE: Store Data: ** (use Anna and BMO)
-	FE: View Data (Anna)
-	FE: Verify Data (Anna - should work)
 
-	TW: ./scripts/single_bequest_attack.sh
+FE: Add Users: Anna
+FE: Add Custodians: BMO
+FE: Store Data: *any string for account and benefactor* (use Anna and BMO)
+FE: Store Data: ** (use Anna and BMO)
+FE: View Data (Anna)
+FE: Verify Data (Anna - should work)
 
-	FE: View Data (Anna - notice a beneficiary is different)
-	FE: Verify Data (Anna - should fail and show one mismatching hash)
+	./scripts/single_bequest_attack.sh
+
+FE: View Data (Anna - notice a beneficiary is different)
+FE: Verify Data (Anna - should fail and show one mismatching hash)
 
 REFRESH THE PAGE
 
 Part 2 - Attack on Entire Account
-	FE: Add Users: Robert
-	FE: Add Custodians: Ledger
-	FE: Add Custodians: Metamask
-	FE: Store Data: *any string for account and benefactor* (use Robert and *)
-	FE: Store Data: ** (use Robert and *)
-	FE: Store Data: ** (use Robert and *)
-	FE: Store Data: ** (use Robert and *)
-	FE: View Data (Robert)
-	FE: Verify Data (Robert - should work)
 
-	TW: ./scripts/account_attack.sh
+FE: Add Users: Robert
+FE: Add Custodians: Ledger
+FE: Add Custodians: Metamask
+FE: Store Data: *any string for account and benefactor* (use Robert and *)
+FE: Store Data: ** (use Robert and *)
+FE: Store Data: ** (use Robert and *)
+FE: Store Data: ** (use Robert and *)
+FE: View Data (Robert)
+FE: Verify Data (Robert - should work)
 
-	FE: View Data (Robert - notice the beneficiaries are all different)
-	FE: Verify Data (Robert - should fail and show all hashes mismatching)
+	./scripts/account_attack.sh
+
+FE: View Data (Robert - notice the beneficiaries are all different)
+FE: Verify Data (Robert - should fail and show all hashes mismatching)
 
 REFRESH THE PAGE
 
 Part 3 - Adding A New Bequest Record
-	FE: Add Users: Jesse
-	FE: View Data (Jesse)
-	Verify Data (Jesse - should work)
 
-	TW: ./scripts/augmentation_attack.sh
+FE: Add Users: Jesse
+FE: View Data (Jesse)
+FE: Verify Data (Jesse - should work)
 
-	FE: View Data (Jesse - notice there's an extra row)
-	FE: Verify Data (Jesse - should fail and show a server-only hash)
+	./scripts/augmentation_attack.sh
+
+FE: View Data (Jesse - notice there's an extra row)
+FE: Verify Data (Jesse - should fail and show a server-only hash)
 
 
 ## Final Thoughts
