@@ -1,3 +1,14 @@
+# Tamper Proof Data
+
+At Bequest, we require that important user data is tamper proof. Otherwise, our system can incorrectly distribute assets if our internal server or database is breached. 
+
+**1. How does the client ensure that their data has not been tampered with?**
+<br />
+**2. If the data has been tampered with, how can the client recover the lost data?**
+
+
+Edit this repo to answer these two questions using any technologies you'd like, there any many possible solutions. Feel free to add comments.
+
 # Problem Submission
 
 ## Goals and Assumptions
@@ -149,6 +160,17 @@ where CONTAINER ID comes from ```docker ps```.
 
 ## Final Thoughts
 
+### Questions
+**1. How does the client ensure that their data has not been tampered with?**
+
+This application solves this problem by allowing the user to store a representation of their data on the server. By comparing their copy of the data's representation with the server's data, the user can be confident the data has not been changed out from under them. This implementation verifies the data on all client-initiated changes to ensure legitimate changes cannot mask changes made by an attacker by being hashed together and stored.
+
+<br />
+**2. If the data has been tampered with, how can the client recover the lost data?**
+
+If the data has been tampered with, a second database that logs the changes in the main database. This information can be used to reconstruct any records to bring them to the point of the last legitimate changes. The implementation leaves much to be desired in terms of automating the recovery process, but the data required to reconstruct the database state is contained in the logs.
+
+### Reflection
 There are lots of places that can be improved and discussed.
 
 The most obvious one is finishing some sort of implementation for doing the rollbacks since it currently requires technical support. One of the best solutions would be to make it such that the user gets to choose which updates were legitimate and then roll back and re-apply just the legitimate ones.
