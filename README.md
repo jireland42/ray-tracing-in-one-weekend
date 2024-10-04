@@ -144,7 +144,7 @@ You'll need to verify the correct (2) containers are being removed. If something
 
 	docker rm {CONTAINER ID}
 
-where CONTAINER ID comes from docker ps.
+where CONTAINER ID comes from ```docker ps```.
 
 
 ## Final Thoughts
